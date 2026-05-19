@@ -1,0 +1,18 @@
+# IntelliJ
+*.iml
+.idea
+
+# npm
+node_modules/
+package-lock.json
+
+# build output (bundled artifact, produced by `npm run build`)
+main.js
+*.js.map
+
+# Obsidian local plugin data
+data.json
+
+# OS
+.DS_Store
+Thumbs.db

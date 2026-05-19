@@ -1,0 +1,11 @@
+{
+	"id": "popup-dictionary",
+	"name": "Popup Dictionary",
+	"version": "0.1.0",
+	"minAppVersion": "0.15.0",
+	"description": "Show word definitions in a popup, powered by Wiktionary.",
+	"author": "Nikitas Tsiris",
+	"authorUrl": "",
+	"fundingUrl": "",
+	"isDesktopOnly": false
+}
