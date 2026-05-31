@@ -6,15 +6,21 @@ import {
 } from "./settings";
 import { DictionaryClient } from "./dictionary";
 import { DefinitionPopup, type Anchor } from "./popup";
-import { getSelectedWord } from "./wordDetection";
+import { getSelectedWord, getWordAtPoint } from "./wordDetection";
 
 const SELECTION_DEBOUNCE_MS = 250;
+const LEAVE_GRACE_MS = 200;
 
 export default class PopupDictionaryPlugin extends Plugin {
 	settings: PopupDictionarySettings;
 
 	private dict: DictionaryClient;
 	private popup: DefinitionPopup;
+
+	// hover state
+	private hoverTimer: number | null = null;
+	private hoverWord: string | null = null;
+	private leaveTimer: number | null = null;
 	private selectionTimer: number | null = null;
 
 	async onload(): Promise<void> {
@@ -22,6 +28,10 @@ export default class PopupDictionaryPlugin extends Plugin {
 
 		this.dict = new DictionaryClient(() => this.settings.wiktionaryEdition);
 		this.popup = new DefinitionPopup(() => this.settings);
+		this.popup.setHoverHandlers(
+			() => this.cancelLeave(),
+			() => this.scheduleLeave()
+		);
 
 		this.addSettingTab(new PopupDictionarySettingTab(this.app, this));
 
@@ -37,10 +47,16 @@ export default class PopupDictionaryPlugin extends Plugin {
 			this.debouncedSelection();
 		});
 
+		// Hover lookup.
+		this.registerDomEvent(document, "mousemove", (evt: MouseEvent) =>
+			this.onMouseMove(evt)
+		);
+
 		// Dismissers.
 		this.registerDomEvent(document, "keydown", (evt: KeyboardEvent) => {
 			if (evt.key === "Escape" && this.popup.isVisible()) {
 				this.popup.hide();
+				this.hoverWord = null;
 			}
 		});
 		this.registerDomEvent(
@@ -52,13 +68,28 @@ export default class PopupDictionaryPlugin extends Plugin {
 					!this.popup.contains(evt.target as Node)
 				) {
 					this.popup.hide();
+					this.hoverWord = null;
 				}
+			},
+			true
+		);
+		this.registerDomEvent(
+			document,
+			"scroll",
+			(evt: Event) => {
+				if (!this.popup.isVisible()) return;
+				if (this.popup.contains(evt.target as Node)) return; // scrolling inside popup
+				if (this.popup.isPinned()) return;
+				this.popup.hide();
+				this.hoverWord = null;
 			},
 			true
 		);
 	}
 
 	onunload(): void {
+		this.clearHoverTimer();
+		this.cancelLeave();
 		if (this.selectionTimer !== null) window.clearTimeout(this.selectionTimer);
 		this.popup?.hide();
 	}
@@ -70,6 +101,8 @@ export default class PopupDictionaryPlugin extends Plugin {
 	async saveSettings(): Promise<void> {
 		await this.saveData(this.settings);
 	}
+
+	// ---- Selection ----------------------------------------------------------
 
 	private debouncedSelection(): void {
 		if (this.selectionTimer !== null) window.clearTimeout(this.selectionTimer);
@@ -89,6 +122,81 @@ export default class PopupDictionaryPlugin extends Plugin {
 		}
 		void this.run(hit.word, hit.rect);
 	}
+
+	// ---- Hover --------------------------------------------------------------
+
+	private onMouseMove(evt: MouseEvent): void {
+		if (!this.settings.hoverEnabled) return;
+
+		if (!this.modifierMatches(evt)) {
+			this.clearHoverTimer();
+			return;
+		}
+		// Don't re-trigger while the pointer is over the popup itself.
+		if (this.popup.isVisible() && this.popup.contains(evt.target as Node)) {
+			return;
+		}
+
+		const x = evt.clientX;
+		const y = evt.clientY;
+		this.clearHoverTimer();
+		this.hoverTimer = window.setTimeout(() => {
+			this.hoverTimer = null;
+			this.handleHover(x, y);
+		}, Math.max(0, this.settings.hoverDelayMs));
+	}
+
+	private handleHover(x: number, y: number): void {
+		if (this.popup.isPinned()) return;
+		const hit = getWordAtPoint(document, x, y);
+		if (!hit) return;
+		if (hit.word === this.hoverWord && this.popup.isVisible()) return;
+		this.hoverWord = hit.word;
+		this.cancelLeave();
+		void this.run(hit.word, hit.range.getBoundingClientRect());
+	}
+
+	private modifierMatches(evt: MouseEvent): boolean {
+		switch (this.settings.hoverModifier) {
+			case "ctrl":
+				return evt.ctrlKey || evt.metaKey;
+			case "alt":
+				return evt.altKey;
+			case "shift":
+				return evt.shiftKey;
+			case "none":
+				return true;
+			default:
+				return false;
+		}
+	}
+
+	private scheduleLeave(): void {
+		this.cancelLeave();
+		this.leaveTimer = window.setTimeout(() => {
+			this.leaveTimer = null;
+			if (!this.popup.isPinned()) {
+				this.popup.hide();
+				this.hoverWord = null;
+			}
+		}, LEAVE_GRACE_MS);
+	}
+
+	private cancelLeave(): void {
+		if (this.leaveTimer !== null) {
+			window.clearTimeout(this.leaveTimer);
+			this.leaveTimer = null;
+		}
+	}
+
+	private clearHoverTimer(): void {
+		if (this.hoverTimer !== null) {
+			window.clearTimeout(this.hoverTimer);
+			this.hoverTimer = null;
+		}
+	}
+
+	// ---- Shared lookup + render --------------------------------------------
 
 	private async run(word: string, anchor: Anchor): Promise<void> {
 		this.popup.showLoading(anchor, word);
