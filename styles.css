@@ -1,0 +1,121 @@
+/* Popup Dictionary — definition popup styling.
+   Uses Obsidian CSS variables so it matches the active theme (light/dark). */
+
+.popup-dictionary {
+	position: fixed;
+	z-index: var(--layer-popover, 48);
+	box-sizing: border-box;
+	max-width: 420px;
+	max-height: 360px;
+	overflow-y: auto;
+	overflow-x: hidden;
+	padding: 10px 12px;
+	background-color: var(--background-primary);
+	color: var(--text-normal);
+	border: 1px solid var(--background-modifier-border);
+	border-radius: var(--radius-m, 8px);
+	box-shadow: var(--shadow-l, 0 6px 20px rgba(0, 0, 0, 0.35));
+	font-size: var(--font-ui-small, 13px);
+	line-height: 1.5;
+	-webkit-user-select: text;
+	user-select: text;
+}
+
+.popup-dictionary-header {
+	display: flex;
+	align-items: baseline;
+	gap: 8px;
+	margin-bottom: 6px;
+	padding-bottom: 6px;
+	border-bottom: 1px solid var(--background-modifier-border);
+}
+
+.popup-dictionary-word {
+	font-weight: 600;
+	font-size: var(--font-ui-medium, 15px);
+	color: var(--text-normal);
+	word-break: break-word;
+}
+
+.popup-dictionary-edition {
+	flex: 0 0 auto;
+	text-transform: uppercase;
+	font-size: 10px;
+	letter-spacing: 0.04em;
+	padding: 1px 5px;
+	border-radius: 4px;
+	background-color: var(--background-modifier-border);
+	color: var(--text-muted);
+}
+
+.popup-dictionary-source {
+	margin-left: auto;
+	flex: 0 0 auto;
+	font-size: var(--font-ui-smaller, 11px);
+	color: var(--text-accent);
+	text-decoration: none;
+	white-space: nowrap;
+}
+
+.popup-dictionary-source:hover {
+	text-decoration: underline;
+}
+
+.popup-dictionary-status {
+	color: var(--text-muted);
+	padding: 2px 0;
+}
+
+.popup-dictionary-status.mod-error {
+	color: var(--text-error);
+}
+
+.popup-dictionary-lang + .popup-dictionary-lang {
+	margin-top: 10px;
+	padding-top: 8px;
+	border-top: 1px solid var(--background-modifier-border);
+}
+
+.popup-dictionary-lang-name {
+	font-weight: 600;
+	color: var(--text-accent);
+	margin-bottom: 2px;
+}
+
+.popup-dictionary-pos {
+	font-style: italic;
+	color: var(--text-muted);
+	margin: 5px 0 2px;
+}
+
+.popup-dictionary-defs {
+	margin: 0;
+	padding-left: 20px;
+}
+
+.popup-dictionary-defs li {
+	margin: 2px 0;
+}
+
+.popup-dictionary-defs a,
+.popup-dictionary-example a {
+	color: var(--text-accent);
+	text-decoration: none;
+}
+
+.popup-dictionary-defs a:hover,
+.popup-dictionary-example a:hover {
+	text-decoration: underline;
+}
+
+.popup-dictionary-examples {
+	margin-top: 3px;
+}
+
+.popup-dictionary-example {
+	color: var(--text-muted);
+	font-style: italic;
+	padding-left: 8px;
+	border-left: 2px solid var(--background-modifier-border);
+	margin: 2px 0;
+}
