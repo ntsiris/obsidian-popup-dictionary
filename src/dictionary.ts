@@ -101,7 +101,15 @@ export class DictionaryClient {
 		word: string,
 		edition: string
 	): Promise<DictionaryResult | null> {
-		return this.fetchOne(word, edition);
+		const direct = await this.fetchOne(word, edition);
+		if (direct) return direct;
+		// Wiktionary titles are case-sensitive; retry a lower-cased variant.
+		const lower = word.toLocaleLowerCase();
+		if (lower !== word) {
+			const alt = await this.fetchOne(lower, edition);
+			if (alt) return alt;
+		}
+		return null;
 	}
 
 	private async fetchOne(
