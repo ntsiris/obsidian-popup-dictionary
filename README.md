@@ -49,6 +49,26 @@ npm run build    # type-check and bundle to main.js
 
 For active development use `npm run dev`, which rebuilds `main.js` on every change.
 
+### Develop in a container (no local Node needed)
+
+A [dev container](https://containers.dev/) is included, so you don't have to install
+Node on your host — only Docker.
+
+- **VS Code:** open the folder and choose *Dev Containers: Reopen in Container*. The
+  container (`mcr.microsoft.com/devcontainers/javascript-node`) runs `npm install`
+  automatically; then run `npm run build` or `npm run dev` in its terminal.
+- **Plain Docker:** from the project folder,
+
+  ```bash
+  docker run --rm -u node \
+    -v "$PWD":/workspaces/app -w /workspaces/app \
+    node:20-bookworm-slim \
+    bash -lc "npm install && npm run build"
+  ```
+
+  `main.js` is written back to the project folder via the bind mount, ready to copy
+  into your vault.
+
 ## Installation
 
 Copy these three files into your vault:
