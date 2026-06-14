@@ -2,10 +2,8 @@
 	"id": "popup-dictionary",
 	"name": "Popup Dictionary",
 	"version": "0.1.0",
-	"minAppVersion": "0.15.0",
-	"description": "Show word definitions in a popup, powered by Wiktionary.",
+	"minAppVersion": "1.4.0",
+	"description": "Show word definitions in a popup when you select or Ctrl-hover a word, powered by Wiktionary across many languages.",
 	"author": "Nikitas Tsiris",
-	"authorUrl": "",
-	"fundingUrl": "",
 	"isDesktopOnly": false
 }

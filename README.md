@@ -71,6 +71,13 @@ Node on your host — only Docker.
 
 ## Installation
 
+### From the Community Plugins browser (once published)
+
+In Obsidian: **Settings → Community plugins → Browse**, search for *Popup Dictionary*,
+install, and enable it.
+
+### Manually (from a release or your own build)
+
 Copy these three files into your vault:
 
 ```
@@ -105,6 +112,14 @@ that location so rebuilds are picked up automatically.)
 | Hover delay | 300 ms | How long to rest on a word before lookup. |
 | Show examples | on | Include example sentences when available. |
 | Max definitions per part of speech | 5 | Cap the number of senses shown. |
+
+## Network use & privacy
+
+To fetch definitions, the plugin sends the word you look up (and your chosen Wiktionary
+edition) over HTTPS to Wikimedia's Wiktionary REST API at
+`https://<edition>.wiktionary.org`. Nothing else is collected, stored remotely, or sent
+anywhere; results are cached only in memory for the current session, and lookups fail
+gracefully when you are offline.
 
 ## Notes & limitations
 

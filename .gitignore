@@ -4,7 +4,6 @@
 
 # npm
 node_modules/
-package-lock.json
 
 # build output (bundled artifact, produced by `npm run build`)
 main.js
