@@ -199,8 +199,6 @@ export class DefinitionPopup {
 	private position(anchor: Anchor): void {
 		const el = this.el;
 		if (!el) return;
-		el.style.maxWidth = `${MAX_W}px`;
-		el.style.maxHeight = `${MAX_H}px`;
 
 		const rect = toRect(anchor);
 		const vw = window.innerWidth;

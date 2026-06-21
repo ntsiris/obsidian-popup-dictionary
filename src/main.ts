@@ -116,7 +116,7 @@ export default class PopupDictionaryPlugin extends Plugin {
 		const hit = getSelectedWord(window);
 		if (!hit) {
 			if (notifyIfEmpty) {
-				new Notice("Popup Dictionary: select a word first.");
+				new Notice("Select a word first.");
 			}
 			return;
 		}
