@@ -17,8 +17,8 @@ languages.
   [`Intl.Segmenter`](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Intl/Segmenter),
   so even scripts without spaces between words (Chinese, Japanese, Thai, Khmer, …)
   are handled. Definitions are returned grouped by language.
-- **Configurable** — Wiktionary edition / gloss language, a language allow-list,
-  examples on/off, number of senses, hover delay and modifier key.
+- **Configurable** — a language allow-list, examples on/off, number of senses,
+  hover delay and modifier key.
 - Theme-aware popup styling; results link back to the Wiktionary page.
 
 ## How it works
@@ -30,10 +30,12 @@ https://<edition>.wiktionary.org/api/rest_v1/page/definition/<word>
 ```
 
 The response is an object keyed by language code; each language has parts of speech
-and HTML definitions. The "edition" you choose (default `en`) is both the wiki queried
-**and** the language the definitions are written in — e.g. set it to `fr` to read
-French-language definitions. The English edition is the broadest: it defines words
-from thousands of languages, with English glosses.
+and HTML definitions. This `page/definition` endpoint is only implemented for the
+**English** edition (`en`) — other editions return HTTP 501, so `en` is effectively
+the only usable value. That's not a real limitation in practice: the English edition
+defines words from thousands of languages (French, Greek, Japanese, …), with the
+glosses written in English. To focus on one or more source languages, use the
+"Show only these languages" allow-list rather than changing the edition.
 
 > Definitions are © Wiktionary contributors, licensed
 > [CC BY-SA](https://creativecommons.org/licenses/by-sa/4.0/). The popup links back to
@@ -106,7 +108,7 @@ that location so rebuilds are picked up automatically.)
 
 | Setting | Default | Description |
 | --- | --- | --- |
-| Wiktionary edition | `en` | Wiki to query and the language of the definitions. 2–3 letter code (`en`, `fr`, `el`, `ja`, …). |
+| Wiktionary edition | `en` | Wiki to query. Only `en` is supported — Wiktionary's definition API is not implemented for other editions (they return HTTP 501). The English edition still covers thousands of languages. |
 | Show only these languages | *(all)* | Comma-separated language codes to display (e.g. `en, el, ja`). Empty shows everything. |
 | Selection trigger | Command / hotkey | Whether selecting a word looks it up automatically or only on command. |
 | Enable hover lookup | on | Show definitions on hover (desktop only). |
@@ -133,6 +135,17 @@ gracefully when you are offline.
   use the language allow-list to focus the results.
 - The hover/selection listeners are attached to the main window; notes opened in a
   separate pop-out window are not covered yet.
+- **Definitions are currently English-only glosses.** Wiktionary's `page/definition`
+  REST endpoint is only implemented for the English edition, so non-English editions
+  return HTTP 501. The English edition still covers thousands of *source* languages —
+  see the roadmap below.
+
+## Roadmap
+
+- **Native-language definitions.** Let you read glosses in French, Greek, etc. — not
+  just English. The REST endpoint can't do this, so it would mean fetching from the
+  per-edition MediaWiki action/parse API and parsing the page HTML. Tracked as a goal;
+  contributions welcome.
 
 ## Project layout
 

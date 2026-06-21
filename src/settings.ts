@@ -44,9 +44,11 @@ export class PopupDictionarySettingTab extends PluginSettingTab {
 		new Setting(containerEl)
 			.setName("Wiktionary edition")
 			.setDesc(
-				"Language edition of Wiktionary to query. This is also the language the " +
-					'definitions are written in (e.g. "en" for English glosses, "fr" for ' +
-					"French). Use a 2–3 letter language code."
+				"Wiktionary edition to query. In practice only the English edition " +
+					'("en") works: Wiktionary\'s definition API is not implemented for ' +
+					"other editions, which return an error. The English edition still " +
+					'defines words from thousands of languages — use "Show only these ' +
+					'languages" below to focus on specific ones.'
 			)
 			.addText((t) =>
 				t

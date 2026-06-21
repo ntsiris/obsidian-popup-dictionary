@@ -128,6 +128,18 @@ export class DictionaryClient {
 		}
 
 		if (resp.status === 404) return null;
+		// Wiktionary's definition REST endpoint is implemented only for the
+		// English edition; every other edition answers 501 Not Implemented.
+		// TODO(roadmap): support native-language glosses (fr, el, …) by falling
+		// back to the per-edition MediaWiki action/parse API and parsing the
+		// page HTML, since this REST endpoint will never cover them.
+		if (resp.status === 501) {
+			throw new Error(
+				`Wiktionary's definition API only supports the English edition, ` +
+					`but the edition is set to "${edition}". Set the Wiktionary edition ` +
+					`back to "en" — it still defines words from thousands of languages.`
+			);
+		}
 		if (resp.status < 200 || resp.status >= 300) {
 			throw new Error(`Wiktionary returned HTTP ${resp.status}.`);
 		}
