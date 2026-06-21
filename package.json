@@ -1,6 +1,6 @@
 {
 	"name": "obsidian-popup-dictionary",
-	"version": "0.2.0",
+	"version": "0.3.0",
 	"description": "Show word definitions in a popup on selection or Ctrl-hover, powered by Wiktionary.",
 	"main": "main.js",
 	"scripts": {
