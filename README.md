@@ -5,6 +5,8 @@ popup when you **select** a word or **Ctrl-hover** it. Definitions come from
 [Wiktionary](https://www.wiktionary.org/), so it works across a very large number of
 languages.
 
+![Popup Dictionary demo](assets/demo.gif)
+
 ## Features
 
 - **Selection lookup** — select a word and run the *Look up selected word* command
