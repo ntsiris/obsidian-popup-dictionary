@@ -92,8 +92,8 @@ export class DictionaryClient {
 	private put(key: string, value: DictionaryResult | null): void {
 		this.cache.set(key, value);
 		if (this.cache.size > CACHE_LIMIT) {
-			const oldest = this.cache.keys().next().value;
-			if (oldest !== undefined) this.cache.delete(oldest);
+			const [oldest] = this.cache.keys();
+			this.cache.delete(oldest);
 		}
 	}
 

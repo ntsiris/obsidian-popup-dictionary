@@ -149,7 +149,7 @@ export default class PopupDictionaryPlugin extends Plugin {
 
 	private handleHover(x: number, y: number): void {
 		if (this.popup.isPinned()) return;
-		const hit = getWordAtPoint(document, x, y);
+		const hit = getWordAtPoint(activeDocument, x, y);
 		if (!hit) return;
 		if (hit.word === this.hoverWord && this.popup.isVisible()) return;
 		this.hoverWord = hit.word;

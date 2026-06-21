@@ -136,7 +136,6 @@ export class PopupDictionarySettingTab extends PluginSettingTab {
 					s
 						.setLimits(0, 1000, 50)
 						.setValue(this.plugin.settings.hoverDelayMs)
-						.setDynamicTooltip()
 						.onChange(async (v) => {
 							this.plugin.settings.hoverDelayMs = v;
 							await this.plugin.saveSettings();
@@ -162,7 +161,8 @@ export class PopupDictionarySettingTab extends PluginSettingTab {
 			.addSlider((s) =>
 				s
 					.setLimits(1, 20, 1)
-					.setValue(this.plugin.settings.maxDefinitionsPerEntry)					.onChange(async (v) => {
+					.setValue(this.plugin.settings.maxDefinitionsPerEntry)
+					.onChange(async (v) => {
 						this.plugin.settings.maxDefinitionsPerEntry = v;
 						await this.plugin.saveSettings();
 					})
