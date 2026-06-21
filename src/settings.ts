@@ -162,9 +162,7 @@ export class PopupDictionarySettingTab extends PluginSettingTab {
 			.addSlider((s) =>
 				s
 					.setLimits(1, 20, 1)
-					.setValue(this.plugin.settings.maxDefinitionsPerEntry)
-					.setDynamicTooltip()
-					.onChange(async (v) => {
+					.setValue(this.plugin.settings.maxDefinitionsPerEntry)					.onChange(async (v) => {
 						this.plugin.settings.maxDefinitionsPerEntry = v;
 						await this.plugin.saveSettings();
 					})

@@ -163,7 +163,7 @@ export class DefinitionPopup {
 
 	private ensureEl(): HTMLElement {
 		if (this.el) return this.el;
-		const el = document.body.createDiv({ cls: "popup-dictionary" });
+		const el = activeDocument.body.createDiv({ cls: "popup-dictionary" });
 		el.addEventListener("mousedown", () => {
 			this.pinned = true;
 		});
@@ -225,11 +225,14 @@ export class DefinitionPopup {
 
 function toRect(anchor: Anchor): SimpleRect {
 	if ("bottom" in anchor) {
-		const r = anchor as DOMRect;
-		return { left: r.left, top: r.top, right: r.right, bottom: r.bottom };
+		return {
+			left: anchor.left,
+			top: anchor.top,
+			right: anchor.right,
+			bottom: anchor.bottom,
+		};
 	}
-	const p = anchor as { x: number; y: number };
-	return { left: p.x, top: p.y, right: p.x, bottom: p.y };
+	return { left: anchor.x, top: anchor.y, right: anchor.x, bottom: anchor.y };
 }
 
 function parseFilter(value: string): Set<string> | null {

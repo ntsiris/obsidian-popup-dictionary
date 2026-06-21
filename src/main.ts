@@ -42,25 +42,25 @@ export default class PopupDictionaryPlugin extends Plugin {
 		});
 
 		// Automatic lookup when a word is selected (if enabled).
-		this.registerDomEvent(document, "selectionchange", () => {
+		this.registerDomEvent(activeDocument, "selectionchange", () => {
 			if (this.settings.triggerOnSelection !== "auto") return;
 			this.debouncedSelection();
 		});
 
 		// Hover lookup.
-		this.registerDomEvent(document, "mousemove", (evt: MouseEvent) =>
+		this.registerDomEvent(activeDocument, "mousemove", (evt: MouseEvent) =>
 			this.onMouseMove(evt)
 		);
 
 		// Dismissers.
-		this.registerDomEvent(document, "keydown", (evt: KeyboardEvent) => {
+		this.registerDomEvent(activeDocument, "keydown", (evt: KeyboardEvent) => {
 			if (evt.key === "Escape" && this.popup.isVisible()) {
 				this.popup.hide();
 				this.hoverWord = null;
 			}
 		});
 		this.registerDomEvent(
-			document,
+			activeDocument,
 			"mousedown",
 			(evt: MouseEvent) => {
 				if (
@@ -74,7 +74,7 @@ export default class PopupDictionaryPlugin extends Plugin {
 			true
 		);
 		this.registerDomEvent(
-			document,
+			activeDocument,
 			"scroll",
 			(evt: Event) => {
 				if (!this.popup.isVisible()) return;
@@ -95,7 +95,8 @@ export default class PopupDictionaryPlugin extends Plugin {
 	}
 
 	async loadSettings(): Promise<void> {
-		this.settings = Object.assign({}, DEFAULT_SETTINGS, await this.loadData());
+		const stored = (await this.loadData()) as Partial<PopupDictionarySettings>;
+		this.settings = Object.assign({}, DEFAULT_SETTINGS, stored);
 	}
 
 	async saveSettings(): Promise<void> {

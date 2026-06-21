@@ -132,14 +132,14 @@ export class DictionaryClient {
 			throw new Error(`Wiktionary returned HTTP ${resp.status}.`);
 		}
 
-		let data: RawResponse;
+		let data: unknown;
 		try {
-			data = resp.json as RawResponse;
+			data = resp.json;
 		} catch {
 			throw new Error("Could not read the Wiktionary response.");
 		}
 		if (!data || typeof data !== "object") return null;
-		return this.parse(word, edition, data);
+		return this.parse(word, edition, data as RawResponse);
 	}
 
 	private parse(

@@ -1,6 +1,6 @@
 {
 	"name": "obsidian-popup-dictionary",
-	"version": "0.1.0",
+	"version": "0.2.0",
 	"description": "Show word definitions in a popup on selection or Ctrl-hover, powered by Wiktionary.",
 	"main": "main.js",
 	"scripts": {
@@ -19,7 +19,6 @@
 	"license": "MIT",
 	"devDependencies": {
 		"@types/node": "^20.11.0",
-		"builtin-modules": "^3.3.0",
 		"esbuild": "0.20.0",
 		"obsidian": "latest",
 		"tslib": "2.6.2",
